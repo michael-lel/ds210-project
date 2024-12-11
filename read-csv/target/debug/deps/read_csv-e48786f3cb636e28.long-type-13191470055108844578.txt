@@ -1,0 +1,1 @@
+Map<Filter<Enumerate<std::result::Iter<'_, &StringRecord>>, {closure@src/main.rs:9:57: 9:74}>, {closure@src/main.rs:9:105: 9:123}>
