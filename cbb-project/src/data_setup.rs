@@ -58,24 +58,24 @@ pub fn create_x(data: &HashMap<(String, String), (Vec<String>, Vec<f64>)>) -> Ar
 }
 
 pub fn create_y(data: &HashMap<(String, String), (Vec<String>, Vec<f64>)>) -> Array2<f64> {
-    let mut tourny_wins = Vec::new();
+    let mut tourny_games = Vec::new();
     for team_year in sort_hash(data) {
         let tourney_result = &data.get(team_year).unwrap().0[1];
         match &tourney_result as &str {
-            "NA" => tourny_wins.push(0.0),
-            "N/A" => tourny_wins.push(0.0),
-            "R68" => tourny_wins.push(1.0),
-            "R64" => tourny_wins.push(1.0),
-            "R32" => tourny_wins.push(2.0),
-            "S16" => tourny_wins.push(3.0),
-            "E8" => tourny_wins.push(4.0),
-            "F4" => tourny_wins.push(5.0),
-            "2ND" => tourny_wins.push(6.0),
-            "Champions" => tourny_wins.push(7.0),
+            "NA" => tourny_games.push(0.0),
+            "N/A" => tourny_games.push(0.0),
+            "R68" => tourny_games.push(1.0),
+            "R64" => tourny_games.push(1.0),
+            "R32" => tourny_games.push(2.0),
+            "S16" => tourny_games.push(3.0),
+            "E8" => tourny_games.push(4.0),
+            "F4" => tourny_games.push(5.0),
+            "2ND" => tourny_games.push(6.0),
+            "Champions" => tourny_games.push(7.0),
             &_ => println!("Improper data"),
         }
     }
-    let num_teams = tourny_wins.len();
-    let y_stats = Array2::from_shape_vec((num_teams, 1), tourny_wins).unwrap();
+    let num_teams = tourny_games.len();
+    let y_stats = Array2::from_shape_vec((num_teams, 1), tourny_games).unwrap();
     y_stats
 }

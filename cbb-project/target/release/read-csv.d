@@ -1,1 +1,0 @@
-/Users/michaellelacheur/Documents/ds210-work/ds210-project/cbb-project/target/release/read-csv: /Users/michaellelacheur/Documents/ds210-work/ds210-project/cbb-project/src/data_setup.rs /Users/michaellelacheur/Documents/ds210-work/ds210-project/cbb-project/src/main.rs /Users/michaellelacheur/Documents/ds210-work/ds210-project/cbb-project/src/neural_network.rs
