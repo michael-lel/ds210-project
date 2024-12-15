@@ -28,10 +28,20 @@ pub fn read_csv(file_name: &str) -> HashMap<(String, String), (Vec<String>, Vec<
     data
 }
 
+fn sort_hash(data: &HashMap<(String, String), (Vec<String>, Vec<f64>)>) -> Vec<&(String, String)> {
+    let mut team_info = Vec::new();
+    for (team_year, (_bio, _stats)) in data {
+        team_info.push(team_year);
+    }
+    team_info.sort_by(|name, year| name.1.cmp(&year.1).then_with(|| name.0.cmp(&year.0)));
+    team_info
+}
+
 pub fn create_x(data: &HashMap<(String, String), (Vec<String>, Vec<f64>)>) -> Array2<f64> {
     let mut complete_stats = Vec::new();
-    for ((_team, _year), (_bio, stats)) in data {
-        complete_stats.extend(stats);
+    for team_year in sort_hash(data) {
+        let team_stats = &data.get(team_year).unwrap().1;
+        complete_stats.extend(team_stats);
     }
     let num_teams = complete_stats.len()/18;
     let mut x_stats = Array2::from_shape_vec((num_teams, 18), complete_stats).unwrap();
@@ -47,20 +57,21 @@ pub fn create_x(data: &HashMap<(String, String), (Vec<String>, Vec<f64>)>) -> Ar
     x_stats
 }
 
-pub fn create_y(data: &HashMap<(String, String), (Vec<String>, Vec<f64>)>) -> Array2<i8> {
+pub fn create_y(data: &HashMap<(String, String), (Vec<String>, Vec<f64>)>) -> Array2<f64> {
     let mut tourny_wins = Vec::new();
-    for ((_team, _year), (bio, _stats)) in data {
-        match &bio[1] as &str {
-            "NA" => tourny_wins.push(-1),
-            "N/A" => tourny_wins.push(-1),
-            "R68" => tourny_wins.push(0),
-            "R64" => tourny_wins.push(0),
-            "R32" => tourny_wins.push(1),
-            "S16" => tourny_wins.push(2),
-            "E8" => tourny_wins.push(3),
-            "F4" => tourny_wins.push(4),
-            "2ND" => tourny_wins.push(5),
-            "Champions" => tourny_wins.push(6),
+    for team_year in sort_hash(data) {
+        let tourney_result = &data.get(team_year).unwrap().0[1];
+        match &tourney_result as &str {
+            "NA" => tourny_wins.push(0.0),
+            "N/A" => tourny_wins.push(0.0),
+            "R68" => tourny_wins.push(1.0),
+            "R64" => tourny_wins.push(1.0),
+            "R32" => tourny_wins.push(2.0),
+            "S16" => tourny_wins.push(3.0),
+            "E8" => tourny_wins.push(4.0),
+            "F4" => tourny_wins.push(5.0),
+            "2ND" => tourny_wins.push(6.0),
+            "Champions" => tourny_wins.push(7.0),
             &_ => println!("Improper data"),
         }
     }
